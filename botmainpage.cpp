@@ -40,11 +40,11 @@ void BotMainPage::setContentInBotMainPage(QJsonArray tmp)
         {
             QJsonObject j = i.toObject();
 
-            QLabel *labelID = new QLabel(QString(j["ID"].toInt()));
+            QLabel *labelID = new QLabel(QString::number(j["ID"].toInt()));
             QLabel *labelUUID = new QLabel(QString(j["UUID"].toString()));
             QLabel *labelNavigation = new QLabel(QString(j["NAVIGATION"].toString()));
             QLabel *labelIP = new QLabel(QString(j["IP"].toString()));
-            QPushButton *buttonID = new QPushButton(QString(j["ID"].toInt()));
+            QPushButton *buttonID = new QPushButton(QString::number(j["ID"].toInt()));
 
             labelID->setText(QString::number(cnt++));
             labelUUID->setText(QString(j["UUID"].toString()));
@@ -60,19 +60,18 @@ void BotMainPage::setContentInBotMainPage(QJsonArray tmp)
             row->addWidget(labelID);
             row->addWidget(labelUUID);
             row->addWidget(labelNavigation);
-            row->addWidget(labelIP);
             row->addWidget(buttonID);
 
-            connect(buttonID, SIGNAL(clicked()), pQSignalMapper, SLOT(map()));
             pQSignalMapper->setMapping(buttonID, QString(j["UUID"].toString()));
-            connect(pQSignalMapper, SIGNAL(mapped(const QString&)), this, SLOT(buttonParameterMapper(const QString&)));
+            connect(buttonID, SIGNAL(clicked()), pQSignalMapper, SLOT(map()));
+            connect(pQSignalMapper, SIGNAL(mappedString(QString)), this, SLOT(buttonParameterMapper(QString)));
 
             scrollLayout->addLayout(row);
         }
     }
 }
 
-void BotMainPage::buttonParameterMapper(const QString &UUID)
+void BotMainPage::buttonParameterMapper(QString UUID)
 {
     emit settingButtonSig(UUID);
 }

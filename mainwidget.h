@@ -29,10 +29,10 @@ private:
     QVBoxLayout *pQVLayout;
 
 signals:
-    void settingBotSpecificationSig(const QString&);
+    void mainWidgetBotSpecificationSig(const QString&);
 
 private slots:
-    void screenTransitionToSpec(const QString&);
-    void screenTransitionToMain();
+    void screenTransitionToSpecInMainWidget(const QString&);
+    void screenTransitionToMainInMainWidget();
 };
 #endif // MAINWIDGET_H

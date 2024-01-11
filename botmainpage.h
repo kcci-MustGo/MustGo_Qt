@@ -33,7 +33,7 @@ signals:
 private slots:
     void slotButtonRefreshClicked();
     void setContentInBotMainPage(QJsonArray);
-    void buttonParameterMapper(const QString&);
+    void buttonParameterMapper(QString);
 };
 
 #endif // BOTMAINPAGE_H

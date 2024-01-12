@@ -62,9 +62,10 @@ void BotMainPage::setContentInBotMainPage(QJsonArray tmp)
             row->addWidget(labelNavigation);
             row->addWidget(buttonID);
 
-            pQSignalMapper->setMapping(buttonID, QString(j["UUID"].toString()));
             connect(buttonID, SIGNAL(clicked()), pQSignalMapper, SLOT(map()));
-            connect(pQSignalMapper, SIGNAL(mappedString(QString)), this, SLOT(buttonParameterMapper(QString)));
+            pQSignalMapper->setMapping(buttonID, QString(j["UUID"].toString()));
+            //connect(pQSignalMapper, SIGNAL(mappedString(QString)), this, SLOT(buttonParameterMapper(QString)));
+            connect(pQSignalMapper, SIGNAL(mapped(QString)), this, SLOT(buttonParameterMapper(QString)));
 
             scrollLayout->addLayout(row);
         }

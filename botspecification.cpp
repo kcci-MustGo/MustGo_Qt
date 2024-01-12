@@ -6,6 +6,7 @@ BotSpecification::BotSpecification(QWidget *parent) :
     ui(new Ui::BotSpecification)
 {
     ui->setupUi(this);
+    jsonDataSize = 0;
     pQLabel = findChild<QLabel*>("labelMap");
     int mapZoomLevel = 10;
     double mapLatitude =  37.57690;
@@ -27,7 +28,7 @@ BotSpecification::BotSpecification(QWidget *parent) :
     });
     manager->get(QNetworkRequest(QUrl(mapUrl)));
 
-    connect(ui->btnSendDestination, SIGNAL(clicked()), this, SLOT(getRoute()));
+    connect(ui->btnSendDestination, SIGNAL(clicked()), this, SLOT(getRouteInBotSpecification()));
     connect(ui->btnCancel, SIGNAL(clicked()), this, SLOT(slotButtonCancelClicked()));
 }
 
@@ -43,11 +44,29 @@ void BotSpecification::slotButtonCancelClicked()
     emit cancelButtonSig();
 }
 
-void BotSpecification::getRoute()
+void BotSpecification::getRouteInBotSpecification()
 {
-    QString tmpAddr = ui->textDestination->toPlainText();
-    emit getRouteButtonSig(tmpAddr);
+    if (!ui->textDestination->toPlainText().isEmpty())
+    {
+        QString tmpStr = tmpUUID + '+' + ui->textDestination->toPlainText();
+        emit getRouteButtonSig(tmpStr);
+    }
 }
+
+void BotSpecification::setRouteInBotSpecification(QJsonArray arg)
+{
+
+    qDebug() << arg.at(0).toObject();
+    QJsonObject qjo = arg.at(0).toObject();
+    qDebug() << qjo["route"][0].toArray()[0];
+    qDebug() << qjo["route"][0].toArray()[0].toDouble();
+    qDebug() << qjo["route"][0].toArray()[1];
+
+    qDebug() << arg.at(1).toObject();
+
+
+}
+
 
 BotSpecification::~BotSpecification()
 {

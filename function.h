@@ -22,13 +22,15 @@ private:
     QNetworkReply *pQNetworkReply;
     QByteArray byteArray;
     QJsonArray tmp;
+    int emitFlag;
 
 private slots:
     void getContentInBotMainPage();
+    void getRouteInBotSpecification(QString);
 
 signals:
     void botMainPageRefresh(QJsonArray);
-    void getRouteInBotSpecification(QString);
+    void botSpecificationRoute(QJsonArray);
 
 };
 

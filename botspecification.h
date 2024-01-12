@@ -28,6 +28,8 @@ private:
     Ui::BotSpecification *ui;
     QLabel *pQLabel;
     QString tmpUUID;
+    QJsonArray jsonData;
+    int jsonDataSize;
 
 signals:
     void cancelButtonSig();
@@ -35,7 +37,8 @@ signals:
 
 private slots:
     void getUUIDInBotSpecification(const QString&);
-    void getRoute();
+    void getRouteInBotSpecification();
+    void setRouteInBotSpecification(QJsonArray);
     void slotButtonCancelClicked();
 
 };

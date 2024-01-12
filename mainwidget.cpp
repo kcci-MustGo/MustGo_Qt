@@ -25,24 +25,24 @@ MainWidget::MainWidget(QWidget *parent)
 
     // getroute button in BotSpecification
     connect(pBotSpecification, SIGNAL(getRouteButtonSig(QString)), pFunction, SLOT(getRouteInBotSpecification(QString)));
+    connect(pFunction, SIGNAL(botSpecificationRoute(QJsonArray)), pBotSpecification, SLOT(setRouteInBotSpecification(QJsonArray)));
 
+    // setting button and transit screen to BotSpecification
+    connect(pBotMainPage, SIGNAL(settingButtonSig(const QString&)), this, SLOT(screenTransitionToSpecInMainWidget(const QString&)));
+    connect(this, SIGNAL(mainWidgetBotSpecificationSig(const QString&)), pBotSpecification, SLOT(getUUIDInBotSpecification(const QString&)));
 
-    // transition to BotSpecification Screen
-    connect(pBotMainPage, SIGNAL(settingButtonSig(const QString&)), this, SLOT(screenTransitionToSpec(const QString&)));
-    connect(this, SIGNAL(settingBotSpecificationSig(const QString&)), pBotSpecification, SLOT(getUUIDInBotSpecification(const QString&)));
-
-    //transition to BotMainpage Screen Without modification
-    connect(pBotSpecification, SIGNAL(cancelButtonSig()), this, SLOT(screenTransitionToMain()));
+    // transition to BotMainpage Screen Without modification
+    connect(pBotSpecification, SIGNAL(cancelButtonSig()), this, SLOT(screenTransitionToMainInMainWidget()));
 }
 
-void MainWidget::screenTransitionToSpec(const QString& UUID)
+void MainWidget::screenTransitionToSpecInMainWidget(const QString& UUID)
 {
     pBotMainPage->hide();
     pBotSpecification->show();
-    emit settingBotSpecificationSig(UUID);
+    emit mainWidgetBotSpecificationSig(UUID);
 }
 
-void MainWidget::screenTransitionToMain()
+void MainWidget::screenTransitionToMainInMainWidget()
 {
     pBotSpecification->hide();
     pBotMainPage->show();

@@ -12,8 +12,9 @@ BotSpecification::BotSpecification(QWidget *parent) :
     pQQuickWidget = new QQuickWidget();
     //pQQuickWidget = qobject_cast<QQuickWidget*>(ui->layoutMap->widget());
     //pQQuickWidget->setSource(QUrl::fromLocalFile(QCoreApplication::applicationDirPath()+"/MapModule.qml"));
+    pRouteProvider = new RouteProvider();
+    pQQuickWidget->rootContext()->setContextProperty("routeProvider", pRouteProvider);
     pQQuickWidget->setSource(QUrl(QStringLiteral("qrc:MapModule.qml")));
-    pQQuickWidget->rootContext()->setContextProperty("beautiful", this);
 
     if (pQQuickWidget->status() == QQuickWidget::Error)
         qDebug() << "pQQuickWidget err" << pQQuickWidget->errors();
@@ -25,12 +26,11 @@ BotSpecification::BotSpecification(QWidget *parent) :
     qmlWidget->resize(500,500);
     ui->layoutMap->addWidget(qmlWidget);
 
-    //pQQuickWidget->show();
-    //qmlWindow->show();
     qmlWidget->show();
 
-    connect(ui->btnSendDestination, SIGNAL(clicked()), this, SLOT(getRouteInBotSpecification()));
+    connect(ui->btnSendDestination, SIGNAL(clicked()), this, SLOT(slotButtonGetRouteClicked()));
     connect(ui->btnCancel, SIGNAL(clicked()), this, SLOT(slotButtonCancelClicked()));
+    connect(ui->btnApply, SIGNAL(clicked()), this, SLOT(slotButtonApplyClicked()));
 }
 
 void BotSpecification::getUUIDInBotSpecification(const QString &UUID)
@@ -38,32 +38,46 @@ void BotSpecification::getUUIDInBotSpecification(const QString &UUID)
     qmlWidget->show();
     pQQuickWidget->show();
     tmpUUID = UUID;
-    qDebug() << tmpUUID;
+    ui->labelTitle->setText(tmpUUID);
+    destName = QString();
+    jsonData = QJsonArray();
     // + UPDATE battery reservation
+    // + UPDATE text and map json if already dest exists
 }
 
 void BotSpecification::slotButtonCancelClicked()
 {
+    ui->textDestination->clear();
+    pRouteProvider->clearPath();
+    pQQuickWidget->repaint();
     qmlWidget->hide();
     emit cancelButtonSig();
 }
 
-void BotSpecification::getRouteInBotSpecification()
+void BotSpecification::slotButtonGetRouteClicked()
 {
     if (!ui->textDestination->toPlainText().isEmpty())
     {
-        QString tmpStr = tmpUUID + '+' + ui->textDestination->toPlainText();
+        destName = ui->textDestination->toPlainText();
+        QString tmpStr = tmpUUID + '+' + destName;
         emit getRouteButtonSig(tmpStr);
     }
 }
 
+void BotSpecification::slotButtonApplyClicked()
+{
+    ui->btnApply->setChecked(true);
+    ui->btnApply->setText("APPLIED");
+    emit applyButtonSig(tmpUUID, destName, jsonData);
+}
+
 void BotSpecification::setRouteInBotSpecification(QJsonArray arg)
 {
-    path.clear();
-    currentPos.clear();
-    bool startBool = true;
+    //bool startBool = true;
 
-    qDebug() << arg.at(0).toObject();
+    //qDebug() << arg.at(0).toObject();
+    jsonData = arg;
+    //qDebug() << "jsondata" << jsonData;
     QJsonArray tmpArray;
 
     for ( const QJsonValue &value : arg)
@@ -75,8 +89,8 @@ void BotSpecification::setRouteInBotSpecification(QJsonArray arg)
             for (const QJsonValue &coordinate : tmpArray)
             {
                 QJsonArray coordinateArray = coordinate.toArray();
-                qDebug() << coordinateArray.at(0).toVariant().toString() << coordinateArray.at(1).toVariant().toString().toDouble();
-                qDebug() << qSetRealNumberPrecision(10) << coordinateArray.at(0).toDouble() << coordinateArray.at(1).toDouble();
+                //qDebug() << coordinateArray.at(0).toVariant().toString() << coordinateArray.at(1).toVariant().toString().toDouble();
+                //qDebug() << qSetRealNumberPrecision(10) << coordinateArray.at(0).toDouble() << coordinateArray.at(1).toDouble();
                 /*
                 if (startBool)
                 {
@@ -86,41 +100,13 @@ void BotSpecification::setRouteInBotSpecification(QJsonArray arg)
                 else
                     path.append(QVariant::fromValue(QGeoCoordinate(coordinateArray.at(0).toDouble(),coordinateArray.at(1).toDouble())));
                     */
-                path.append(QVariant::fromValue(QGeoCoordinate(coordinateArray.at(1).toDouble(),coordinateArray.at(0).toDouble())));
+                pRouteProvider->setPath(QGeoCoordinate(coordinateArray.at(1).toDouble(), coordinateArray.at(0).toDouble()));
             }
-
-            updatePath(path);
+            pRouteProvider->pathUpdate(pRouteProvider->getPath());
         }
     }
-    /*
-    QJsonObject qjo = arg.at(0).toObject()["route"].toArray();
-    qDebug() << qjo[0];
-    qDebug() << qjo["route"][0].toArray()[0].toDouble();
-    qDebug() << qjo["route"][0].toArray()[1];
-
-    qDebug() << arg.at(1).toObject();
-    */
+    qDebug() << "setRouteBtnClicked()";
 }
-
-QVariantList BotSpecification::getPath() const
-{
-    return path;
-}
-
-QVariantList BotSpecification::getCurrentPos() const
-{
-}
-
-void BotSpecification::updatePath(const QVariantList &newPath)
-{
-    path = newPath;
-    emit setPathChanged(path);
-}
-
-void BotSpecification::updateCurrentPos(const QVariantList &newPos)
-{
-}
-
 
 BotSpecification::~BotSpecification()
 {

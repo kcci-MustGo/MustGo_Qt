@@ -31,7 +31,10 @@ MainWidget::MainWidget(QWidget *parent)
     connect(pBotMainPage, SIGNAL(settingButtonSig(const QString&)), this, SLOT(screenTransitionToSpecInMainWidget(const QString&)));
     connect(this, SIGNAL(mainWidgetBotSpecificationSig(const QString&)), pBotSpecification, SLOT(getUUIDInBotSpecification(const QString&)));
 
-    // transition to BotMainpage Screen Without modification
+    // apply button
+    connect(pBotSpecification, SIGNAL(applyButtonSig(const QString, const QString, const QJsonArray&)), pFunction, SLOT(applyrouteInBotSpecification(const QString, const QString, const QJsonArray&)));
+
+    // close button and transition to BotMainpage Screen Without modification
     connect(pBotSpecification, SIGNAL(cancelButtonSig()), this, SLOT(screenTransitionToMainInMainWidget()));
 }
 

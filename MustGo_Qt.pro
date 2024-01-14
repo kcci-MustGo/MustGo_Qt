@@ -14,12 +14,14 @@ SOURCES += \
     function.cpp \
     main.cpp \
     mainwidget.cpp \
+    routeprovider.cpp
 
 HEADERS += \
     botmainpage.h \
     botspecification.h \
     function.h \
-    mainwidget.h
+    mainwidget.h \
+    routeprovider.h
 
 FORMS += \
     botmainpage.ui \

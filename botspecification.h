@@ -20,6 +20,7 @@
 #include <QMetaClassInfo>
 #include <QGeoPath>
 #include <QDebug>
+#include "routeprovider.h"
 
 namespace Ui {
 class BotSpecification;
@@ -28,16 +29,10 @@ class BotSpecification;
 class BotSpecification : public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY(QVariantList path READ getPath NOTIFY setPathChanged)
-    Q_PROPERTY(QVariantList currentPos READ getCurrentPos NOTIFY setCurrentPosChanged)
 
 public:
     explicit BotSpecification(QWidget *parent = nullptr);
     ~BotSpecification();
-    Q_INVOKABLE void updatePath(const QVariantList &newPath);
-    Q_INVOKABLE void updateCurrentPos(const QVariantList &newPos);
-    QVariantList getPath() const;
-    QVariantList getCurrentPos() const;
 
 private:
     Ui::BotSpecification *ui;
@@ -46,22 +41,22 @@ private:
     QWidget *qmlWidget;
     QLabel *pQLabel;
     QString tmpUUID;
+    QString destName;
     QJsonArray jsonData;
-    QVariantList path;
-    QVariantList currentPos;
+    RouteProvider *pRouteProvider;
     int jsonDataSize;
 
 signals:
     void cancelButtonSig();
+    void applyButtonSig(const QString, const QString, const QJsonArray&);
     void getRouteButtonSig(QString);
-    void setPathChanged(QVariantList);
-    void setCurrentPosChanged();
 
 private slots:
     void getUUIDInBotSpecification(const QString&);
-    void getRouteInBotSpecification();
     void setRouteInBotSpecification(QJsonArray);
+    void slotButtonGetRouteClicked();
     void slotButtonCancelClicked();
+    void slotButtonApplyClicked();
 
 };
 

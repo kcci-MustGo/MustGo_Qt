@@ -17,7 +17,6 @@ class RouteProvider : public QObject
 private:
     QGeoPath m_path;
 
-
 public:
     explicit RouteProvider(QObject *parent = nullptr);
     void setPath(QGeoCoordinate);

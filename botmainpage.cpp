@@ -67,9 +67,9 @@ void BotMainPage::setContentInBotMainPage(QJsonArray tmp)
             connect(buttonID, SIGNAL(clicked()), pQSignalMapper, SLOT(map()));
             pQSignalMapper->setMapping(buttonID, QString(j["UUID"].toString()));
             // in mac
-            connect(pQSignalMapper, SIGNAL(mappedString(QString)), this, SLOT(buttonParameterMapper(QString)));
+            //connect(pQSignalMapper, SIGNAL(mappedString(QString)), this, SLOT(buttonParameterMapper(QString)));
             // in linux
-            //connect(pQSignalMapper, SIGNAL(mapped(QString)), this, SLOT(buttonParameterMapper(QString)));
+            connect(pQSignalMapper, SIGNAL(mapped(QString)), this, SLOT(buttonParameterMapper(QString)));
 
             scrollLayout->addLayout(row);
         }

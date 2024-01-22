@@ -51,6 +51,9 @@ void BotSpecification::slotButtonCancelClicked()
     pRouteProvider->clearPath();
     pQQuickWidget->repaint();
     qmlWidget->hide();
+
+    ui->btnApply->setChecked(false);
+    ui->btnApply->setText("apply");
     emit cancelButtonSig();
 }
 

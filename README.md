@@ -11,6 +11,6 @@ make
 ```
 
 # design
-![](https://github.com/kcci-MustGo/MustGo_Qt/img/1.png)
-![](https://github.com/kcci-MustGo/MustGo_Qt/img/2.png)
-![](https://github.com/kcci-MustGo/MustGo_Qt/img/3.png)
+![](https://github.com/kcci-MustGo/MustGo_Qt/main/img/1.png)
+![](https://github.com/kcci-MustGo/MustGo_Qt/main/img/2.png)
+![](https://github.com/kcci-MustGo/MustGo_Qt/main/img/3.png)

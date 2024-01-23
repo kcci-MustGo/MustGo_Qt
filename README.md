@@ -1,9 +1,12 @@
 # MustGo_Qt
-qt 6.6.0
+needs Qt version above 5.15 LTS
+(tested on 5.15 and 6.6)
 
+# prerequisite
+1. build openssl
+'''
+cd openssl
+./config
+make
+'''
 
-1. install ssl
-1-1 wget https://www.openssl.org/source/openssl-1.1.1q.tar.gz
-1-2 tar -xf and cd openssl
-1-3 ./config
-1-4 make

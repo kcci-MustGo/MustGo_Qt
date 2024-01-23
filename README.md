@@ -4,9 +4,9 @@ needs Qt version above 5.15 LTS
 
 # prerequisite
 1. build openssl
-'''
+   ```
 cd openssl
 ./config
 make
-'''
+  ```
 
